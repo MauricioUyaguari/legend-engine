@@ -414,15 +414,23 @@ public class RelationalParseTreeWalker
     {
         SourceInformation sourceInformation = walkerSourceInformation.getSourceInformation(ctx);
 
-        MilestoningSpecificationSourceCode code = new MilestoningSpecificationSourceCode(
-                ctx.start.getInputStream().getText(Interval.of(ctx.start.getStartIndex(), ctx.stop.getStopIndex())),
-                ctx.milestoningType().getText(),
-                sourceInformation,
-                new ParseTreeWalkerSourceInformation.Builder(walkerSourceInformation)
-                        .withLineOffset(sourceInformation.startLine - 1)
-                        .withColumnOffset(sourceInformation.startColumn)
-                        .build()
-        );
+        MilestoningSpecificationSourceCode code =
+                sourceInformation != null?
+                        new MilestoningSpecificationSourceCode(
+                            ctx.start.getInputStream().getText(Interval.of(ctx.start.getStartIndex(), ctx.stop.getStopIndex())),
+                            ctx.milestoningType().getText(),
+                            sourceInformation,
+                            new ParseTreeWalkerSourceInformation.Builder(walkerSourceInformation)
+                                    .withLineOffset(sourceInformation.startLine - 1)
+                                    .withColumnOffset(sourceInformation.startColumn)
+                                    .build()
+                        ):
+                        new MilestoningSpecificationSourceCode(
+                            ctx.start.getInputStream().getText(Interval.of(ctx.start.getStartIndex(), ctx.stop.getStopIndex())),
+                            ctx.milestoningType().getText(),
+                            sourceInformation,
+                            new ParseTreeWalkerSourceInformation.Builder(walkerSourceInformation).build()
+                        );
 
         List<IRelationalGrammarParserExtension> extensions = IRelationalGrammarParserExtension.getExtensions();
         Milestoning milestoning = IRelationalGrammarParserExtension.process(code, ListIterate.flatCollect(extensions, IRelationalGrammarParserExtension::getExtraMilestoningParsers));

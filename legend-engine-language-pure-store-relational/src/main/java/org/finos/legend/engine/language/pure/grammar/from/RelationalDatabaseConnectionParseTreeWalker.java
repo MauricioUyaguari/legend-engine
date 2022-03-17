@@ -95,15 +95,23 @@ public class RelationalDatabaseConnectionParseTreeWalker
     {
         SourceInformation sourceInformation = walkerSourceInformation.getSourceInformation(spec);
 
-        PostProcessorSpecificationSourceCode code = new PostProcessorSpecificationSourceCode(
-                spec.getText(),
-                spec.specificationType().getText(),
-                sourceInformation,
-                new ParseTreeWalkerSourceInformation.Builder(walkerSourceInformation)
-                        .withLineOffset(sourceInformation.startLine - 1)
-                        .withColumnOffset(sourceInformation.startColumn)
-                        .build()
-        );
+        PostProcessorSpecificationSourceCode code =
+                sourceInformation!=null?
+                        new PostProcessorSpecificationSourceCode(
+                                spec.getText(),
+                                spec.specificationType().getText(),
+                                sourceInformation,
+                                new ParseTreeWalkerSourceInformation.Builder(walkerSourceInformation)
+                                        .withLineOffset(sourceInformation.startLine - 1)
+                                        .withColumnOffset(sourceInformation.startColumn)
+                                        .build()
+                        ):
+                        new PostProcessorSpecificationSourceCode(
+                                spec.getText(),
+                                spec.specificationType().getText(),
+                                sourceInformation,
+                                new ParseTreeWalkerSourceInformation.Builder(walkerSourceInformation).build()
+                        );
 
         PostProcessor processor = IRelationalGrammarParserExtension.process(code, parsers);
 
@@ -120,15 +128,22 @@ public class RelationalDatabaseConnectionParseTreeWalker
         RelationalDatabaseConnectionParserGrammar.SpecificationContext specification = ctx.specification();
         SourceInformation sourceInformation = walkerSourceInformation.getSourceInformation(ctx);
 
-        DataSourceSpecificationSourceCode code = new DataSourceSpecificationSourceCode(
-                ctx.specification().getText(),
-                specification.specificationType().getText(),
-                sourceInformation,
-                new ParseTreeWalkerSourceInformation.Builder(walkerSourceInformation)
-                        .withLineOffset(sourceInformation.startLine - 1)
-                        .withColumnOffset(sourceInformation.startColumn)
-                        .build()
-        );
+        DataSourceSpecificationSourceCode code =
+                sourceInformation != null?
+                        new DataSourceSpecificationSourceCode(
+                                ctx.specification().getText(),
+                                specification.specificationType().getText(),
+                                sourceInformation,
+                                new ParseTreeWalkerSourceInformation.Builder(walkerSourceInformation)
+                                        .withLineOffset(sourceInformation.startLine - 1)
+                                        .withColumnOffset(sourceInformation.startColumn)
+                                        .build()
+                        ): new DataSourceSpecificationSourceCode(
+                                ctx.specification().getText(),
+                            specification.specificationType().getText(),
+                            sourceInformation,
+                            new ParseTreeWalkerSourceInformation.Builder(walkerSourceInformation).build()
+                        );
 
         List<IRelationalGrammarParserExtension> extensions = IRelationalGrammarParserExtension.getExtensions();
         DatasourceSpecification ds = IRelationalGrammarParserExtension.process(code, ListIterate.flatCollect(extensions, IRelationalGrammarParserExtension::getExtraDataSourceSpecificationParsers));
@@ -147,15 +162,23 @@ public class RelationalDatabaseConnectionParseTreeWalker
         RelationalDatabaseConnectionParserGrammar.SpecificationContext specification = ctx.specification();
         SourceInformation sourceInformation = walkerSourceInformation.getSourceInformation(ctx);
 
-        AuthenticationStrategySourceCode code = new AuthenticationStrategySourceCode(
-                ctx.specification().getText(),
-                specification.specificationType().getText(),
-                sourceInformation,
-                new ParseTreeWalkerSourceInformation.Builder(walkerSourceInformation)
-                        .withLineOffset(sourceInformation.startLine - 1)
-                        .withColumnOffset(sourceInformation.startColumn)
-                        .build()
-        );
+        AuthenticationStrategySourceCode code =
+                sourceInformation != null?
+                        new AuthenticationStrategySourceCode(
+                                ctx.specification().getText(),
+                                specification.specificationType().getText(),
+                                sourceInformation,
+                                new ParseTreeWalkerSourceInformation.Builder(walkerSourceInformation)
+                                        .withLineOffset(sourceInformation.startLine - 1)
+                                        .withColumnOffset(sourceInformation.startColumn)
+                                        .build()
+                        ):
+                        new AuthenticationStrategySourceCode(
+                                ctx.specification().getText(),
+                                specification.specificationType().getText(),
+                                sourceInformation,
+                                new ParseTreeWalkerSourceInformation.Builder(walkerSourceInformation).build()
+                        );
 
         List<IRelationalGrammarParserExtension> extensions = IRelationalGrammarParserExtension.getExtensions();
         AuthenticationStrategy auth = IRelationalGrammarParserExtension.process(code, ListIterate.flatCollect(extensions, IRelationalGrammarParserExtension::getExtraAuthenticationStrategyParsers));

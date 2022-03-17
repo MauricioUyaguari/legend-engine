@@ -59,15 +59,23 @@ public class ExternalFormatConnectionParseTreeWalker
         ExternalFormatConnectionParserGrammar.SpecificationContext specification = ctx.specification();
         SourceInformation sourceInformation = walkerSourceInformation.getSourceInformation(ctx);
 
-        ExternalSourceSpecificationSourceCode code = new ExternalSourceSpecificationSourceCode(
-                ctx.specification().getText(),
-                specification.specificationType().getText(),
-                sourceInformation,
-                new ParseTreeWalkerSourceInformation.Builder(walkerSourceInformation)
-                        .withLineOffset(sourceInformation.startLine - 1)
-                        .withColumnOffset(sourceInformation.startColumn)
-                        .build()
-        );
+        ExternalSourceSpecificationSourceCode code =
+                sourceInformation!=null?
+                        new ExternalSourceSpecificationSourceCode(
+                                ctx.specification().getText(),
+                                specification.specificationType().getText(),
+                                sourceInformation,
+                                new ParseTreeWalkerSourceInformation.Builder(walkerSourceInformation)
+                                        .withLineOffset(sourceInformation.startLine - 1)
+                                        .withColumnOffset(sourceInformation.startColumn)
+                                        .build()
+                        ):
+                        new ExternalSourceSpecificationSourceCode(
+                            ctx.specification().getText(),
+                            specification.specificationType().getText(),
+                            sourceInformation,
+                            new ParseTreeWalkerSourceInformation.Builder(walkerSourceInformation).build()
+                        );
 
         List<IExternalFormatGrammarParserExtension> extensions = IExternalFormatGrammarParserExtension.getExtensions();
         ExternalSource result = IExternalFormatGrammarParserExtension.process(code, ListIterate.flatCollect(extensions, IExternalFormatGrammarParserExtension::getExtraExternalSourceSpecificationParsers));
