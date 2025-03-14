@@ -30,15 +30,67 @@ Class meta::pure::metamodel::dataSpace::DataSpace extends PackageableElement
   title: String[0..1];
   description: String[0..1];
 
-  executionContexts: DataSpaceExecutionContext[1..*];
-  defaultExecutionContext: DataSpaceExecutionContext[1];
+
 
   diagrams: DataSpaceDiagram[*];
   elements: PackageableElement[*];
   executables: DataSpaceExecutable[*];
 
   supportInfo: DataSpaceSupportInfo[0..1];
+  
+  executionContexts: DataSpaceExecutionContext[1..*];
+  defaultExecutionContext: DataSpaceExecutionContext[1];
 }
+
+
+
+
+// Access Points
+
+Class <<typemodifiers.abstract>> meta::pure::metamodel::dataSpace::AccessPointerProvider
+{
+  id: String[1];
+
+}
+
+Class meta::pure::metamodel::dataSpace::ModelExecutionContext
+{
+  id: String[1];
+  title: String[0..1];
+  description: String[0..1];
+  mapping: meta::pure::mapping::Mapping[1];
+  defaultRuntime: meta::pure::runtime::PackageableRuntime[1];
+}
+
+Class meta::pure::metamodel::dataSpace::ModelAccessPointProvider extends meta::pure::metamodel::dataSpace::AccessPointerProvider
+{
+
+  defaultContext: ModelExecutionContext[1];
+  contexts: ModelExecutionContext[1..*];
+  filteredElements: PackageableElement[*];
+  mapping: meta::pure::mapping::Mapping[1];
+  defaultRuntime: meta::pure::runtime::PackageableRuntime[1];
+  sampleExecutables: DataSpaceExecutable[*];
+}
+
+Class meta::pure::metamodel::dataSpace::StoreAccessPointProvider extends meta::pure::metamodel::dataSpace::AccessPointerProvider
+{
+
+
+  {doc.doc = 'constraint to check if both connection store'}runtime: meta::pure::runtime::PackageableRuntime[1];
+
+
+}
+
+
+
+Class meta::pure::metamodel::dataSpace::AccessPoint
+{
+
+}
+
+
+
 
 Class meta::pure::metamodel::dataSpace::DataSpaceExecutionContext
 {
